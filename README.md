@@ -6,7 +6,7 @@ Uses the syntax as described in [markdownguide.org](https://www.markdownguide.or
 
 # Feature To-Do
 - [ ] Headings
-- [ ] Paragraphs
+- [*] Paragraphs
 - [ ] Line Breaks
 - [*] Emphasis
 - [ ] Blockquotes

@@ -5,14 +5,20 @@ import re
 md_tags = {
     "**": ("<strong>", "</strong>"),
     "*":  ("<em>", "</em>"),
+    "`":  ("<code>", "</code>"),
+    "p": ("<p>", "</p>"),
 }
 
 
 def convert(md_string) -> str:
-    """Converts a given string of markdown text into an HTML equivalent"""
+    """Converts a given string of Markdown text into an HTML equivalent
+    Args:
+        md_string (str): String containing markdown"""
 
     md_string = _find_bold(md_string)
     md_string = _find_italics(md_string)
+    md_string = _find_code(md_string)
+    md_string = _find_paragraph(md_string)
 
     return md_string
 
@@ -64,3 +70,38 @@ def _find_italics(md_string) -> str:
     tag = '*'
     regex = r"(?<![*\\])[*]|[_]"  # Potentially buggy behavior because _word* will italicize
     return _find_generic(tag, regex, md_string)
+
+
+def _find_code(md_string) -> str:
+    """Find code tags and return a string with them inserted.
+    Args:
+        md_string (str): String containing markdown"""
+
+    tag = '`'
+    regex = r"(?<![*\\])[`]"
+    return _find_generic(tag, regex, md_string)
+
+
+def _find_paragraph(md_string) -> str:
+    """Enclose paragraphs with a <p> tag
+    Args:
+        md_string (str): String containing markdown"""
+
+    result = ""
+    tag_split = re.split(r"(?<=\n)\n", md_string)
+
+    # This branch if multiple paragraphs are in the md_string
+    if len(tag_split) > 0:
+        for idx in range(len(tag_split)):
+            if idx < len(tag_split) - 1:
+                result += "<p>" + tag_split[idx][:-1] + "</p>\n\n"
+            else:
+                result += "<p>" + tag_split[idx] + "</p>"
+
+        # Remove redundant paragraphs caused by extra blank lines
+        result = ''.join(result.split('<p></p>'))
+
+        return result
+
+    else:
+        return md_string
