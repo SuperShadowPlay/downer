@@ -1,4 +1,7 @@
-"""Main file of the package. Holds the convert function."""
+"""Main file of the package. Holds the convert function.
+
+CURRENT FUNCTIONALITY DEPRECATED. This will be re-purposed into the main import file but until then
+it only holds old code from previous testing of the concept."""
 
 import re
 
